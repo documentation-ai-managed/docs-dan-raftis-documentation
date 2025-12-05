@@ -2,19 +2,25 @@
 title: Introduction
 description: Overview of Dan Raftis Documentation and its core capabilities
 ---
-
 ## Getting Started
 
 Welcome to Dan Raftis Documentation, your comprehensive platform for organizing and managing project documentation. This documentation space provides a centralized hub where you can create, edit, and share documentation for all your projects in one place. Whether you're building APIs, developing software, or maintaining technical knowledge bases, Dan Raftis offers the tools you need to keep your documentation current and accessible.
 
-<Columns cols={3}>
-  <Card title="Quick Setup" icon="rocket" href="authentication">
+|   |   |   |
+| - | - | - |
+|   |   |   |
+|   |   |   |
+
+<Columns cols="3">
+  <Card title="Quick Setup" href="authentication" icon="rocket" horizontal="false">
     Get started with authentication and access your documentation space in minutes.
   </Card>
-  <Card title="Organize Content" icon="folder" href="configuration">
+
+  <Card title="Organize Content" href="configuration" icon="folder" horizontal="false">
     Learn how to structure and configure your documentation projects effectively.
   </Card>
-  <Card title="Automate Updates" icon="refresh-cw" href="webhooks">
+
+  <Card title="Automate Updates" href="webhooks" icon="refresh-cw" horizontal="false">
     Set up webhooks to keep your documentation synchronized with your codebase.
   </Card>
 </Columns>
@@ -26,46 +32,51 @@ Dan Raftis Documentation stands out with its intuitive interface and powerful fe
 <Tabs>
   <Tab title="Collaboration" icon="users">
     Work together seamlessly with real-time editing and commenting features.
-    
+
     <Steps>
-      <Step title="Invite Team Members" icon="user-plus">
+      <Step title="Invite Team Members" icon="user-plus" title-type="p">
         Add collaborators to your documentation projects.
       </Step>
-      <Step title="Set Permissions" icon="shield">
+
+      <Step title="Set Permissions" icon="shield" title-type="p">
         Configure access levels for different team roles.
       </Step>
-      <Step title="Track Changes" icon="git-branch">
+
+      <Step title="Track Changes" icon="git-branch" title-type="p">
         Monitor edits and maintain version history.
       </Step>
     </Steps>
   </Tab>
+
   <Tab title="Integration" icon="plug">
     Connect with your favorite tools and platforms.
-    
-    <CodeGroup tabs="GitHub,Slack,Jira">
+
+    <CodeGroup show-lines="true" tabs={[]}>
       ```bash
-gh repo clone my-org/docs
-git add .
-git commit -m "Update docs"
-git push
-```
+      gh repo clone my-org/docs
+      git add .
+      git commit -m "Update docs"
+      git push
+      ```
+
       ```bash
-curl -X POST https://slack.com/api/chat.postMessage \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -d "channel=#docs" \
-  -d "text=Documentation updated"
-```
+      curl -X POST https://slack.com/api/chat.postMessage \
+      -H "Authorization: Bearer YOUR_TOKEN" \
+      -d "channel=#docs" \
+      -d "text=Documentation updated"
+      ```
+
       ```bash
-curl -X POST https://your-domain.atlassian.net/rest/api/3/issue \
-  -H "Authorization: Basic YOUR_ENCODED_CREDENTIALS" \
-  -H "Content-Type: application/json" \
-  -d '{"fields":{"project":{"key":"DOC"},"summary":"Update documentation","issuetype":{"id":"10001"}}}'
-```
+      curl -X POST https://your-domain.atlassian.net/rest/api/3/issue \
+      -H "Authorization: Basic YOUR_ENCODED_CREDENTIALS" \
+      -H "Content-Type: application/json" \
+      -d '{"fields":{"project":{"key":"DOC"},"summary":"Update documentation","issuetype":{"id":"10001"}}}'
+      ```
     </CodeGroup>
   </Tab>
 </Tabs>
 
-<Callout kind="info">
+<Callout kind="info" collapsed="false">
   Pro tip: Start with a small project to familiarize yourself with the interface before migrating your entire documentation library.
 </Callout>
 
@@ -75,10 +86,13 @@ Unlike traditional documentation tools, Dan Raftis is built specifically for dev
 
 <Expandable title="Advanced Capabilities" default-open="false">
   Discover the powerful features that make Dan Raftis the preferred choice for technical documentation.
-  
+
   - **Version Control Integration**: Automatic syncing with Git repositories
+
   - **API Documentation Generation**: Auto-generate docs from OpenAPI specs
+
   - **Search and Discovery**: Full-text search across all your documentation
+
   - **Export Options**: Generate PDFs, static sites, and more
 </Expandable>
 
@@ -86,10 +100,13 @@ Unlike traditional documentation tools, Dan Raftis is built specifically for dev
   <Expandable title="Is Dan Raftis free?" default-open="false">
     Dan Raftis offers a generous free tier for individual developers and small teams. Premium plans are available for larger organizations with advanced features.
   </Expandable>
+
   <Expandable title="Can I import existing docs?" default-open="false">
     Yes! Dan Raftis supports importing from GitHub, GitLab, Confluence, and other popular documentation platforms.
   </Expandable>
+
   <Expandable title="What formats are supported?" default-open="false">
     We support Markdown, HTML, and OpenAPI specifications. You can also embed images, diagrams, and interactive elements.
   </Expandable>
 </ExpandableGroup>
+
