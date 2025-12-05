@@ -1,0 +1,117 @@
+---
+title: Configuration
+description: Configure and customize your Dan Raftis documentation projects
+---
+
+## Project Configuration
+
+Set up your documentation projects with the right structure and settings for optimal organization and collaboration.
+
+<Steps>
+  <Step title="Create Project" icon="folder-plus">
+    Start by creating a new documentation project in your dashboard.
+    
+    ```bash
+danraftis create-project --name "My Documentation" --template default
+```
+  </Step>
+  <Step title="Configure Settings" icon="settings">
+    Adjust project settings including visibility, permissions, and integrations.
+    
+    <CodeGroup tabs="JSON,YAML">
+      ```json
+{
+  "name": "My Documentation",
+  "visibility": "private",
+  "permissions": {
+    "read": "team",
+    "write": "contributors",
+    "admin": "owners"
+  },
+  "integrations": {
+    "github": {
+      "repo": "myorg/docs",
+      "branch": "main"
+    }
+  }
+}
+```
+      ```yaml
+name: My Documentation
+visibility: private
+permissions:
+  read: team
+  write: contributors
+  admin: owners
+integrations:
+  github:
+    repo: myorg/docs
+    branch: main
+```
+    </CodeGroup>
+  </Step>
+  <Step title="Import Content" icon="upload">
+    Import existing documentation from various sources.
+  </Step>
+</Steps>
+
+## Advanced Configuration
+
+Dive deeper into configuration options for complex documentation setups.
+
+<Tabs>
+  <Tab title="Versioning" icon="git-branch">
+    Set up version control for your documentation.
+    
+    <Expandable title="Semantic Versioning" default-open="false">
+      Use semantic versioning to track documentation changes alongside your software releases.
+      
+      | Version | Description | Example |
+      |---------|-------------|---------|
+      | Major | Breaking changes | `2.0.0` |
+      | Minor | New features | `1.1.0` |
+      | Patch | Bug fixes | `1.0.1` |
+    </Expandable>
+  </Tab>
+  <Tab title="Themes" icon="palette">
+    Customize the appearance of your documentation.
+    
+    ```json
+{
+  "theme": {
+    "primaryColor": "#3B82F6",
+    "fontFamily": "Inter, sans-serif",
+    "codeTheme": "github-dark"
+  }
+}
+```
+  </Tab>
+</Tabs>
+
+<Callout kind="tip">
+  Use environment-specific configurations to maintain different settings for development, staging, and production.
+</Callout>
+
+<ExpandableGroup>
+  <Expandable title="How do I backup my configuration?" default-open="false">
+    Use the `danraftis export-config` command to download your project configuration as a JSON file.
+  </Expandable>
+  <Expandable title="Can I use custom domains?" default-open="false">
+    Yes, custom domains are available on premium plans. Configure them in your project settings.
+  </Expandable>
+</ExpandableGroup>
+
+## Integration Setup
+
+Connect Dan Raftis with your development tools and workflows.
+
+```bash
+# GitHub integration
+danraftis integrate github --repo myorg/docs --token $GITHUB_TOKEN
+
+# Slack notifications
+danraftis integrate slack --webhook $SLACK_WEBHOOK --channel #docs
+
+# CI/CD pipeline
+danraftis integrate ci --provider github-actions --workflow docs.yml
+```

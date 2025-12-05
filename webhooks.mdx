@@ -1,0 +1,132 @@
+---
+title: Webhooks
+description: Set up webhooks to automate documentation updates and notifications
+---
+
+## Webhook Overview
+
+Webhooks allow you to receive real-time notifications when events occur in your Dan Raftis documentation, enabling automation and integration with other tools.
+
+<Steps>
+  <Step title="Create Webhook" icon="webhook">
+    Set up a new webhook endpoint in your project settings.
+    
+    ```bash
+curl -X POST https://api.danraftis.com/v1/webhooks \
+  -H "Authorization: Bearer $DAN_RAFTIS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://your-app.com/webhook",
+    "events": ["doc.created", "doc.updated", "doc.deleted"],
+    "secret": "your_webhook_secret"
+  }'
+```
+  </Step>
+  <Step title="Handle Events" icon="code">
+    Implement event handlers in your application.
+    
+    ```javascript
+const express = require('express');
+const crypto = require('crypto');
+
+const app = express();
+app.use(express.json());
+
+app.post('/webhook', (req, res) => {
+  const signature = req.headers['x-danraftis-signature'];
+  const body = JSON.stringify(req.body);
+  const expectedSignature = crypto
+    .createHmac('sha256', 'your_webhook_secret')
+    .update(body)
+    .digest('hex');
+  
+  if (signature !== `sha256=${expectedSignature}`) {
+    return res.status(401).send('Invalid signature');
+  }
+  
+  const { event, data } = req.body;
+  console.log(`Received ${event}:`, data);
+  
+  // Handle the event
+  switch (event) {
+    case 'doc.created':
+      // Update search index
+      break;
+    case 'doc.updated':
+      // Send notification
+      break;
+  }
+  
+  res.sendStatus(200);
+});
+```
+  </Step>
+  <Step title="Test Webhook" icon="check-circle">
+    Verify your webhook is working correctly.
+  </Step>
+</Steps>
+
+## Event Types
+
+Dan Raftis sends webhooks for various events in your documentation lifecycle.
+
+<Expandable title="Document Events" default-open="false">
+  Events related to document creation, updates, and deletion.
+  
+  | Event | Description | Payload |
+  |-------|-------------|---------|
+  | `doc.created` | New document added | Document object |
+  | `doc.updated` | Document modified | Document object, changes |
+  | `doc.deleted` | Document removed | Document ID |
+  | `doc.published` | Document published | Document object |
+</Expandable>
+
+<Expandable title="Project Events" default-open="false">
+  Events for project-level changes.
+  
+  | Event | Description | Payload |
+  |-------|-------------|---------|
+  | `project.created` | New project created | Project object |
+  | `project.updated` | Project settings changed | Project object |
+  | `project.deleted` | Project removed | Project ID |
+</Expandable>
+
+<Tabs>
+  <Tab title="Security" icon="shield">
+    Secure your webhooks with proper validation.
+    
+    <Callout kind="danger">
+      Always verify webhook signatures to prevent malicious requests.
+    </Callout>
+  </Tab>
+  <Tab title="Retry Logic" icon="refresh-cw">
+    Handle webhook delivery failures gracefully.
+    
+    ```javascript
+// Implement exponential backoff
+const retryWebhook = async (url, payload, attempt = 1) => {
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (error) {
+    if (attempt < 5) {
+      const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
+      setTimeout(() => retryWebhook(url, payload, attempt + 1), delay);
+    }
+  }
+};
+```
+  </Tab>
+</Tabs>
+
+<ExpandableGroup>
+  <Expandable title="How do I debug webhook issues?" default-open="false">
+    Check your server logs and use tools like ngrok to expose local endpoints for testing.
+  </Expandable>
+  <Expandable title="What's the webhook payload format?" default-open="false">
+    All webhooks send JSON payloads with `event`, `timestamp`, and `data` fields.
+  </Expandable>
+</ExpandableGroup>

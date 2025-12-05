@@ -1,0 +1,120 @@
+---
+title: Authentication
+description: Learn how to authenticate and secure access to your Dan Raftis documentation
+---
+
+## Authentication Methods
+
+Dan Raftis supports multiple authentication methods to ensure secure access to your documentation while maintaining ease of use for your team.
+
+<Tabs>
+  <Tab title="API Keys" icon="key">
+    Use API keys for programmatic access to the Dan Raftis API.
+    
+    <Steps>
+      <Step title="Generate API Key" icon="plus">
+        Navigate to your account settings and create a new API key.
+        
+        ```bash
+curl -X POST https://api.danraftis.com/v1/keys \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"My API Key","permissions":["read","write"]}'
+```
+      </Step>
+      <Step title="Configure Environment" icon="settings">
+        Add the API key to your environment variables.
+        
+        ```bash
+export DAN_RAFTIS_API_KEY=your_api_key_here
+```
+      </Step>
+      <Step title="Test Connection" icon="check-circle">
+        Verify your API key works correctly.
+        
+        ```bash
+curl -H "Authorization: Bearer $DAN_RAFTIS_API_KEY" \
+  https://api.danraftis.com/v1/repositories
+```
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="OAuth" icon="lock">
+    Integrate with OAuth providers for seamless user authentication.
+    
+    <CodeGroup tabs="GitHub,Google">
+      ```javascript
+const githubAuth = {
+  clientId: 'your_github_client_id',
+  redirectUri: 'https://danraftis.com/oauth/callback',
+  scope: ['repo', 'user']
+};
+```
+      ```javascript
+const googleAuth = {
+  clientId: 'your_google_client_id',
+  redirectUri: 'https://danraftis.com/oauth/callback',
+  scope: ['profile', 'email']
+};
+```
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+## Security Best Practices
+
+Implement these security measures to protect your documentation and maintain compliance with industry standards.
+
+<Callout kind="alert">
+  Always use HTTPS when making API requests and never expose your API keys in client-side code.
+</Callout>
+
+<Expandable title="Access Control" default-open="false">
+  Configure granular permissions for different team members and projects.
+  
+  | Role | Read Access | Write Access | Admin Access |
+  |------|-------------|--------------|--------------|
+  | Viewer | ✅ | ❌ | ❌ |
+  | Editor | ✅ | ✅ | ❌ |
+  | Admin | ✅ | ✅ | ✅ |
+</Expandable>
+
+<ExpandableGroup>
+  <Expandable title="How do I reset my API key?" default-open="false">
+    Go to your account settings, revoke the old key, and generate a new one. Update all applications using the old key.
+  </Expandable>
+  <Expandable title="Can I use SSO?" default-open="false">
+    Yes, Dan Raftis supports SAML-based single sign-on for enterprise customers.
+  </Expandable>
+</ExpandableGroup>
+
+## Rate Limiting
+
+Understand the rate limits and how to handle them in your applications.
+
+```javascript
+const axios = require('axios');
+
+const apiClient = axios.create({
+  baseURL: 'https://api.danraftis.com/v1',
+  headers: {
+    'Authorization': `Bearer ${process.env.DAN_RAFTIS_API_KEY}`,
+    'Content-Type': 'application/json'
+  }
+});
+
+// Add retry logic for rate limits
+apiClient.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 429) {
+      const retryAfter = error.response.headers['retry-after'];
+      console.log(`Rate limited. Retry after ${retryAfter} seconds.`);
+      return new Promise(resolve => 
+        setTimeout(() => resolve(apiClient(error.config)), retryAfter * 1000)
+      );
+    }
+    return Promise.reject(error);
+  }
+);
+```
